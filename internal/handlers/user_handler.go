@@ -16,7 +16,7 @@ type UserHandler struct {
 	userRepo *repositories.UserRepository
 }
 
-func newUserHandler(userRepo *repositories.UserRepository) *UserHandler {
+func NewUserHandler(userRepo *repositories.UserRepository) *UserHandler {
 	return &UserHandler{userRepo: userRepo}
 }
 
@@ -46,7 +46,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	}
 
 	if err := h.userRepo.CreateUser(c.Request.Context(), user); err != nil { //insertion en bdd par la fonction du dépôt
-		c.JSON(http.StatusInternalServerError, gin.H{"erreur": "Erreur lors de la création de l'utilisateur"})
+		c.JSON(http.StatusInternalServerError, gin.H{"erreur": "Erreur lors de la création de l'utilisateur : " + string(err.Error())})
 		return
 	}
 

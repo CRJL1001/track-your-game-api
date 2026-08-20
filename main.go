@@ -35,30 +35,31 @@ func main() {
 	if err := dbPool.Ping(context.Background()); err != nil {
 		log.Fatalf("Echec du ping à la base de données : %v", err)
 	}
-	
+
 	log.Println("Connecté à PostegreSQL")
 
 	//initialisation des dépôts et handlers
-	userRepo := repositories.newUserRepository(dbPool)
-	userHandler := handlers.newUserHandler(userRepo)
+	userRepo := repositories.NewUserRepository(dbPool)
+	userHandler := handlers.NewUserHandler(userRepo)
 
 	//initialisation de Gin (framework HTTP)
 	router := gin.Default()
 
 	//Routes
-	api := router.Group("/api/v1"){
+	api := router.Group("/api/v1")
+	{
 		api.POST("/users", userHandler.CreateUser)
-		api.POST("/users/login", UserHandler.Login)
+		api.POST("/users/login", userHandler.Login)
 	}
 
 	//Démarrer le serveur
 	srv := &http.Server{
-		Addr: ":" + cfg.Port,
+		Addr:    ":" + cfg.Port,
 		Handler: router,
 	}
 
 	//Gestion des signaux pour un arrêt propre
-	go func(){ //goroutine -> ne bloque pas l'exécution du main
+	go func() { //goroutine -> ne bloque pas l'exécution du main
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed { //écoute les erreurs du serveur
 			log.Fatalf("Erreur de serveur : %v", err) //si erreur autre que fermeture intentionnele on arrête tout
 		}
@@ -67,16 +68,16 @@ func main() {
 	log.Printf("Serveur démarré sur le port %s", cfg.Port) //message
 
 	//Attente de signaux SUGINT ou SIGTERM pour arrpêter le serveur
-	quit := make(chan os.Signal, 1) //on créer un canal quit 
+	quit := make(chan os.Signal, 1)                      //on créer un canal quit
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM) //on envoie un signal dans le canal quit lors de la réception des signaux SIGINT et SIGTERM
-	<-quit //bloque l'éxécution sur ce canal jusqu'a recevoir un signal
-	log.Println("Arrêt du serveur...") //continuer l'éxécution 
+	<-quit                                               //bloque l'éxécution sur ce canal jusqu'a recevoir un signal
+	log.Println("Arrêt du serveur...")                   //continuer l'éxécution
 
 	//arrêt avec timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second) //donne un context qui donne 10 secondes max pour terminer les requêtes
-	defer cancel() //Annule le contexte à la fin de l'exécution, attend la fin des requêtes
-	if err := srv.Shutdown(ctx); err != nil { //ferme le serveur proprement
-		log.Fatalf("Erreur lors de l'arrêt du serveur : %v", err) 
+	defer cancel()                                                           //Annule le contexte à la fin de l'exécution, attend la fin des requêtes
+	if err := srv.Shutdown(ctx); err != nil {                                //ferme le serveur proprement
+		log.Fatalf("Erreur lors de l'arrêt du serveur : %v", err)
 	}
 	log.Println("Serveur arrêté")
 }
@@ -84,9 +85,3 @@ func main() {
 func buildDSN(cfg *config.Config) string {
 	return "postgres://" + cfg.DBUser + ":" + cfg.DBPassword + "@" + cfg.DBHost + ":" + cfg.DBPort + "/" + cfg.DBName + "?sslmode=" + cfg.DBSSLMode
 }
-
-
-
-
-
-

@@ -15,7 +15,7 @@ type UserRepository struct { //définition d'un dépôt d'utilisateurs
 	db *pgxpool.Pool
 }
 
-func newUserRepository(db *pgxpool.Pool) *UserRepository { //fonction de création d'un dépôt d'utilisateurs
+func NewUserRepository(db *pgxpool.Pool) *UserRepository { //fonction de création d'un dépôt d'utilisateurs
 	return &UserRepository{db: db} //retourne l'adresse du dépôt créé
 }
 
