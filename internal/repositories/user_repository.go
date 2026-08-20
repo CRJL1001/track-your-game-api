@@ -5,9 +5,7 @@ import (
 	"fmt"     //affichage erreurs etc
 
 	//logs
-	"track_your_game_api/internal/models" //modeles
-
-	"github.com/crjl1001/track-your-game-api/internal/models"
+	"github.com/crjl1001/track-your-game-api/internal/models" //modeles
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool" //pilotes
 	//pilote postgreSQL

@@ -3,8 +3,9 @@ package handlers
 import (
 	"net/http"
 	"time"
-	"track-your-game-api/internal/models"       //modeles
-	"track-your-game-api/internal/repositories" //dépôt
+
+	"github.com/crjl1001/track-your-game-api/internal/models"       //modeles
+	"github.com/crjl1001/track-your-game-api/internal/repositories" //dépôt
 
 	"github.com/gin-gonic/gin"   //requête http
 	"github.com/google/uuid"     //uuid

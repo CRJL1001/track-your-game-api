@@ -9,9 +9,8 @@ import (
 	"syscall"   //constante des signaux système
 	"time"      //temps
 
-	"track-your-game-api/internal/config"
-	"track-your-game-api/internal/handlers"
-	"track-your-game-api/internal/repositories"
+	"github.com/crjl1001/track-your-game-api/internal/handlers"
+	"github.com/crjl1001/track-your-game-api/internal/repositories"
 
 	"github.com/crjl1001/track-your-game-api/internal/config"
 	"github.com/gin-gonic/gin"        // requête http
@@ -83,7 +82,7 @@ func main() {
 }
 
 func buildDSN(cfg *config.Config) string {
-	return "postegres://" + cfg.DBUser + ":" + cfg.DBPassword + "@" + cfg.DBHost + ":" + cfg.DBPort + "/" + cfg.DBName + "?sslmode=" + cfg.DBSSLMode
+	return "postgres://" + cfg.DBUser + ":" + cfg.DBPassword + "@" + cfg.DBHost + ":" + cfg.DBPort + "/" + cfg.DBName + "?sslmode=" + cfg.DBSSLMode
 }
 
 
