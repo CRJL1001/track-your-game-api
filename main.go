@@ -1,5 +1,0 @@
-package trackyourgameapi
-
-func main() {
-
-}

@@ -23,7 +23,7 @@ func newUserRepository(db *pgxpool.Pool) *UserRepository { //fonction de créati
 
 func (r *UserRepository) CreateUser(ctx context.Context, user *models.User) error { //insertion de l'utilisateur dans la base de données
 	query := ` 
-		INSERT INTO user (id, email, password, created_at, updated_at)
+		INSERT INTO users (id, email, password, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5)
 	` //SQL -> préparation de la requête
 
@@ -40,7 +40,7 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *models.User) erro
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*models.User, error) { //récupérer un utilisateur par mail
 	var user models.User //utilisateur à retourner
 	request := `
-		SELECT id, email, password, created_at, updated_at FROM user WHERE email = $1 LIMIT 1
+		SELECT id, email, password, created_at, updated_at FROM users WHERE email = $1 LIMIT 1
 	` //requête préparée
 	err := r.db.QueryRow(ctx, request, email).Scan( //insertion des données dans les champs de user
 		&user.ID,
@@ -61,7 +61,7 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*mod
 func (r *UserRepository) GetUserByID(ctx context.Context, id string) (*models.User, error) {
 	var user models.User
 	request := `
-		SELECT id, email, password, created_at, updated_at FROM user WHERE id = $2 LIMIT 1
+		SELECT id, email, password, created_at, updated_at FROM users WHERE id = $2 LIMIT 1
 	`
 	err := r.db.QueryRow(ctx, request, id).Scan(
 		&user.ID,
