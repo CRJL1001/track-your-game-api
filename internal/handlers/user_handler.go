@@ -30,7 +30,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	}
 
 	//hash du mot de passe
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"erreur": "Erreur lors du cryptage du mot de passe"})
 		return
