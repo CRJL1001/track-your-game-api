@@ -20,7 +20,7 @@ func NewUserHandler(userRepo *repositories.UserRepository) *UserHandler {
 	return &UserHandler{userRepo: userRepo}
 }
 
-func (h *UserHandler) CreateUser(c *gin.Context) {
+func (h *UserHandler) CreateUser(c *gin.Context) { //email arrive vide
 	var req models.CreateUserRequest
 
 	//vérification données sous format JSON de la requête
@@ -29,6 +29,12 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
+	// var password = req.Password
+	// if password == "" {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"erreur": "mdp null DEBUG"})
+	// 	return
+	// }
+
 	//hash du mot de passe
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -36,13 +42,20 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
+	// var email = req.Email
+
+	// if email == "" {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"erreur": "mail null DEBUG"})
+	// 	return
+	// }
+
 	//création de l'utilisateur temporaire
 	user := &models.User{
-		ID:        uuid.New(),
-		Email:     req.Email,
-		Password:  string(hashedPassword),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:             uuid.New(),
+		Email:          req.Email,
+		HashedPassword: string(hashedPassword),
+		CreatedAt:      time.Now(),
+		UpdatedAt:      time.Now(),
 	}
 
 	if err := h.userRepo.CreateUser(c.Request.Context(), user); err != nil { //insertion en bdd par la fonction du dépôt
@@ -76,7 +89,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	//vérification du mdp
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(req.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"erreur": "Email ou mdp incorrect"})
 		return
 	}

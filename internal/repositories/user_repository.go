@@ -28,7 +28,7 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *models.User) erro
 	_, err := r.db.Exec(ctx, query, //exécution de la requête
 		user.ID,
 		user.Email,
-		user.Password,
+		user.HashedPassword,
 		user.CreatedAt,
 		user.UpdatedAt,
 	)
@@ -43,7 +43,7 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*mod
 	err := r.db.QueryRow(ctx, request, email).Scan( //insertion des données dans les champs de user
 		&user.ID,
 		&user.Email,
-		&user.Password,
+		&user.HashedPassword,
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)
@@ -64,7 +64,7 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id string) (*models.Us
 	err := r.db.QueryRow(ctx, request, id).Scan(
 		&user.ID,
 		&user.Email,
-		&user.Password,
+		&user.HashedPassword,
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)

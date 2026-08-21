@@ -1,10 +1,8 @@
 package config
 
 import ( //import
-	"log"
-	"os"
 
-	"github.com/joho/godotenv"
+	"os"
 )
 
 type Config struct { //structure d'une configuration de connexion à la bdd
@@ -19,9 +17,6 @@ type Config struct { //structure d'une configuration de connexion à la bdd
 
 func LoadConfig() (*Config, error) { //charge les données d'environement dans une configuration
 	//chargement des variables d'environnement
-	if err := godotenv.Load(); err != nil {
-		log.Println("Aucun fichier .env trouvé, utilisation des variables locales")
-	}
 
 	return &Config{
 		DBHost:     getEnv("DB_HOST", ""),

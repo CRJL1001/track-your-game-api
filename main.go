@@ -83,5 +83,5 @@ func main() {
 }
 
 func buildDSN(cfg *config.Config) string {
-	return "postgres://" + cfg.DBUser + ":" + cfg.DBPassword + "@" + cfg.DBHost + ":" + cfg.DBPort + "/" + cfg.DBName + "?sslmode=" + cfg.DBSSLMode
+	return "postgres://" + cfg.DBUser + ":" + cfg.DBPassword + "@host.docker.internal" + ":" + cfg.DBPort + "/" + cfg.DBName + "?sslmode=" + cfg.DBSSLMode
 }
